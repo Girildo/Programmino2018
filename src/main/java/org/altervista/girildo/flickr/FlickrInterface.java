@@ -63,11 +63,12 @@ class FlickrInterface {
         }
         catch(IllegalStateException ex)
         {
-            throw new Exception("Il link alla discussione Flickr che hai inserito non è valido. Assicurati di averlo copiato interamente!");
+            throw new Exception("Il link alla discussione Flickr che hai inserito non è valido. " +
+                    "Assicurati di averlo copiato interamente!", ex);
         }
         catch(FlickrException ex)
         {
-            throw new Exception("Sembra esserci un errore con Flickr");
+            throw new Exception("Sembra esserci un errore con Flickr", ex);
         }
 
         if (repList == null)

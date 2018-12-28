@@ -1,6 +1,6 @@
 {
   "$schema":"RulesSchema.json",
-  "name": "Sonia Galleries",
+  "name": "Campionato",
   "voting-categories": {
     "named": true,
     "count": 4,

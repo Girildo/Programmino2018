@@ -13,8 +13,7 @@ public class TableComputer {
         this.votesProvider = votesProvider;
     }
 
-    public Table generateTable()
-    {
+    public Table generateTable() throws Exception {
         List<Voteable> photos =  this.photoProvider.provideVoteables();
         List<Vote> votes = this.votesProvider.provideVotes();
 

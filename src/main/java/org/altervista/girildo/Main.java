@@ -16,19 +16,9 @@ public class Main {
         t.addVoteable(ph[2]);
 
 
-        t.addVote(new Vote(ph[0], "T", 1));
-        t.addVote(new Vote(ph[1], "E", 1));
-        t.addVote(new Vote(ph[0], "E", 1));
-        t.addVote(new Vote(ph[1], "C", 1));
-        t.addVote(new Vote(ph[0], "T", 1));
 
         t.computeTable();
 
-        FlickrProvider provider = new FlickrProvider() {
-            public List<Vote> provideVotes() {
-                return null;
-            }
-        };
 
     }
 }
