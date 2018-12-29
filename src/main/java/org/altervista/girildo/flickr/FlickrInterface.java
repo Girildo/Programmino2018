@@ -15,6 +15,7 @@ import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
+import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 import java.util.stream.Collectors;
 
@@ -25,8 +26,10 @@ class FlickrInterface {
 
     private static final JsonFactory JSON_FACTORY = JacksonFactory.getDefaultInstance();
     private static final String KEY_FILE_NAME = "/FlickrKey.json";
-    private static final String DISCUSSION_ID_PATTERN =
-            "(?:(?:https?://)?www\\.flickr\\.com/groups/.+/discuss)/(\\d+)/?";
+    private static final String DISCUSSION_ID_REGEX =
+            "(?:(?:https?://)?www\\.flickr\\.com/groups/)(.+)(?:/discuss/)(\\d+)/?";
+
+    private static final Pattern DISCUSSION_ID_PATTERN = Pattern.compile(DISCUSSION_ID_REGEX);
 
     private Flickr flickr;
 
@@ -46,11 +49,12 @@ class FlickrInterface {
     private static String getTopicIDFromUrl(String url) throws Exception
     {
         url = url.trim();
-        final String topicID = Pattern.compile(DISCUSSION_ID_PATTERN).matcher(url).group(1);
-        return topicID;
+        Matcher matcher = DISCUSSION_ID_PATTERN.matcher(url);
+        matcher.find();
+        return matcher.group(2);
     }
 
-    public List<FlickrComment> getCommentsFromDiscussion(String url) throws Exception
+    List<FlickrComment> getCommentsFromDiscussion(String url) throws Exception
     {
         GroupDiscussInterface dInterface = flickr.getDiscussionInterface();
         ArrayList<Reply> repList = null;
@@ -81,7 +85,7 @@ class FlickrInterface {
 
 
     private static FlickrInterface singleton;
-    public static FlickrInterface getInstance() {
+    static FlickrInterface getInstance() {
         if(singleton == null)
             singleton = new FlickrInterface();
         return singleton;

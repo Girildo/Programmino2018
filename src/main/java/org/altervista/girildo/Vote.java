@@ -6,9 +6,9 @@ public class Vote {
     private VoteCategory category;
     private int points;
 
-//    public Vote(String voted, String categoryName, int points){
-//        this(voted, new VoteCategory(categoryName), points);
-//    }
+    public Vote(String voted, String categoryName, int points){
+        this(voted, new VoteCategory(categoryName), points);
+    }
 
     public Vote(String voted, VoteCategory category, int points)
     {

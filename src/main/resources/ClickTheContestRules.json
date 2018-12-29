@@ -1,10 +1,10 @@
 {
   "$schema":"RulesSchema.json",
-  "name": "Campionato",
+  "name": "ClickTheContest",
   "voting-categories": {
     "named": true,
     "count": 4,
-    "names": ["Ti", "Ce", "Eo", "It"],
+    "names": ["Eo", "Ce", "It", "Tc"],
     "values": [
       1,
       1,

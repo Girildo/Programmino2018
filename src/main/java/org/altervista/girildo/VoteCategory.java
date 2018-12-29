@@ -23,10 +23,10 @@ public class VoteCategory implements Comparable<VoteCategory> {
     }
 
     @Override
-    public boolean equals(Object obj) {
-        if(!(obj instanceof VoteCategory))
+    public boolean equals(Object other) {
+        if(!(other instanceof VoteCategory))
             return false;
-        return this.getName().equalsIgnoreCase(((VoteCategory)obj).getName());
+        return this.getName().equalsIgnoreCase(((VoteCategory)other).getName());
     }
 
     @Override

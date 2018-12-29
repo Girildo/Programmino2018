@@ -1,0 +1,15 @@
+{
+  "$schema":"RulesSchema.json",
+  "name": "Sonia Gallery",
+  "voting-categories": {
+    "named": false,
+    "count": 5,
+    "values": [
+      5,
+      4,
+      3,
+      2,
+      1
+    ]
+  }
+}

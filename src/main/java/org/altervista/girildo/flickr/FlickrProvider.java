@@ -17,7 +17,7 @@ public abstract class FlickrProvider implements VoteProvider, VoteableProvider {
         return flickrInterface;
     }
 
-    protected List<FlickrComment> getListOfComments() throws Exception {
+    List<FlickrComment> getListOfComments() throws Exception {
         if (this.listOfComments == null)
             this.listOfComments = flickrInterface.getCommentsFromDiscussion(this.flickrURL);
         return this.listOfComments;
