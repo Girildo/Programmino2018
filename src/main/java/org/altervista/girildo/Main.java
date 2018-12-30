@@ -16,8 +16,9 @@ public class Main {
 
         try {
             FlickrProvider provider = new FlickrJSONProvider(
-                    "https://www.flickr.com/groups/clickthecontest/discuss/72157704704255574/",
-                    "/ClickTheContestRules.json");
+                    //"https://www.flickr.com/groups/clickthecontest/discuss/72157704704255574/",
+                    "https://www.flickr.com/groups/1744262@N24/discuss/72157698919350640/",
+                    "/SoniaGalleryRules.json");
             provider.provideVotes();
         } catch (Exception e) {
             e.printStackTrace();

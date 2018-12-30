@@ -1,21 +1,24 @@
 package org.altervista.girildo.flickr;
 
+import org.altervista.girildo.Agent;
+
 class FlickrComment {
 
-    private final String authorName;
-    private final String text;
 
-    FlickrComment (String text, String authorName)
+    private final String text;
+    private final Agent author;
+
+    FlickrComment (String text, Agent author)
     {
         this.text = text;
-        this.authorName = authorName;
+        this.author = author;
     }
 
     public String getText() {
         return text;
     }
 
-    public String getAuthorName() {
-        return authorName;
+    public Agent getAuthor() {
+        return author;
     }
 }

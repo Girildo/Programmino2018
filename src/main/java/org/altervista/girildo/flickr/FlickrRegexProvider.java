@@ -1,7 +1,9 @@
 package org.altervista.girildo.flickr;
 
+import com.flickr4java.flickr.FlickrException;
 import org.altervista.girildo.Vote;
 import org.altervista.girildo.Voteable;
+import org.altervista.girildo.exceptions.InvalidVoteException;
 import org.altervista.girildo.util.HelperMethods;
 import sun.reflect.generics.reflectiveObjects.NotImplementedException;
 
@@ -27,32 +29,51 @@ public abstract class FlickrRegexProvider extends FlickrProvider {
     }
 
     @Override
-    public final List<Vote> provideVotes() throws Exception {
+    public final List<Vote> provideVotes() throws InvalidVoteException, IllegalStateException {
         ArrayList<Vote> toReturn = new ArrayList<>();
 
         HashMap<String, Integer> pointScheme = this.getPointScheme();
 
         Pattern pattern = this.compileVotesRegexPattern();
 
-        for (FlickrComment comment : super.getListOfComments()) {
-            Matcher matcher = pattern.matcher(comment.getText());
-            if (!matcher.matches())
-                continue;
+        try {
+            for (FlickrComment comment : super.getListOfComments()) {
+                Matcher matcher = pattern.matcher(comment.getText());
+                if (!matcher.matches())
+                    continue;
 
-            for (int i = 1; i < matcher.groupCount(); i += 2) {
-                if (matcher.start(i) != -1) {
-                    Vote v = new Vote(matcher.group(i), matcher.group(i + 1), 1);
+                for (int i = 1; i < matcher.groupCount(); i += 2) {
+                    if (matcher.start(i) != -1) {
+                        // Only happening for groups that are actually matched.
+                        Integer pointNum = pointScheme.get(matcher.group(i));
+                        if (pointNum == null)
+                            pointNum = pointScheme.get(Integer.toString(i % 2));
+                        pointNum = pointNum.intValue();
+
+                        Vote v = new Vote(
+                                comment.getAuthor(),
+                                matcher.group(i),     // The category
+                                matcher.group(i + 1), // The voteable itself
+                                pointNum);   // The points
+                        toReturn.add(v);
+                    }
                 }
             }
         }
-        return null;
+        catch (FlickrException | IllegalStateException ex)
+        {
+            throw new IllegalStateException("Non sono riuscito a recuperare i commenti da Flickr, dev'esserci" +
+                    "un problema col sito", ex);
+        }
+        return toReturn;
     }
 
     /**
      * Builds the regex pattern given the categories and all their possible permutations.
      * Odd matching groups contain the voting categories, if they exists.
      * Even matching groups contain the photo ID, in any case.
-     * @return The {@link Pattern} matching the specified category.
+     *
+     * @return The {@link Pattern} matching the categories specified in the JSON file.
      */
     private Pattern compileVotesRegexPattern() {
         List<String> categories = this.getCategoriesName();
@@ -77,9 +98,6 @@ public abstract class FlickrRegexProvider extends FlickrProvider {
         builder.append("(?:.+)?"); //This matches random characters without capturing
         return Pattern.compile(builder.toString(), Pattern.MULTILINE | Pattern.CASE_INSENSITIVE | Pattern.DOTALL);
     }
-
-
-
 
 
     abstract List<String> getCategoriesName();

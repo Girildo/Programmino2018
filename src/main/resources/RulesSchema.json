@@ -6,6 +6,7 @@
   "title": "The Root Schema",
   "required": [
     "name",
+    "start-voting-pattern",
     "voting-categories"
   ],
   "properties": {
@@ -19,6 +20,12 @@
       ],
       "pattern": "^(.*)$"
     },
+
+    "start-voting-pattern": {
+      "$id": "#/properties/start-voting-pattern",
+      "type": "string"
+    },
+
     "voting-categories": {
       "$id": "#/properties/voting-categories",
       "type": "object",

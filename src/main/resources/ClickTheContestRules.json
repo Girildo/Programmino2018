@@ -1,6 +1,7 @@
 {
   "$schema":"RulesSchema.json",
   "name": "ClickTheContest",
+  "start-voting-pattern": ".+Esempio di votazione.+",
   "voting-categories": {
     "named": true,
     "count": 4,

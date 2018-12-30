@@ -46,7 +46,7 @@ class FlickrInterface {
         }
     }
 
-    private static String getTopicIDFromUrl(String url) throws Exception
+    private static String getTopicIDFromUrl(String url)
     {
         url = url.trim();
         Matcher matcher = DISCUSSION_ID_PATTERN.matcher(url);
@@ -54,7 +54,7 @@ class FlickrInterface {
         return matcher.group(2);
     }
 
-    List<FlickrComment> getCommentsFromDiscussion(String url) throws Exception
+    List<FlickrComment> getCommentsFromDiscussion(String url) throws IllegalStateException, FlickrException
     {
         GroupDiscussInterface dInterface = flickr.getDiscussionInterface();
         ArrayList<Reply> repList = null;
@@ -67,19 +67,19 @@ class FlickrInterface {
         }
         catch(IllegalStateException ex)
         {
-            throw new Exception("Il link alla discussione Flickr che hai inserito non è valido. " +
+            throw new IllegalStateException("Il link alla discussione Flickr che hai inserito non è valido. " +
                     "Assicurati di averlo copiato interamente!", ex);
         }
         catch(FlickrException ex)
         {
-            throw new Exception("Sembra esserci un errore con Flickr", ex);
+            throw new FlickrException("Sembra esserci un errore con Flickr", ex);
         }
 
         if (repList == null)
-            throw new Exception("RepList null (Errore di Flickr!)");
+            throw new FlickrException("RepList null (Errore di Flickr!)");
 
         return repList.stream()
-               .map(reply -> new FlickrComment(reply.getMessage(), reply.getAuthorname()))
+               .map(reply -> new FlickrComment(reply.getMessage(), new FlickrUser(reply.getAuthorname())))
                .collect(Collectors.toList());
     }
 
