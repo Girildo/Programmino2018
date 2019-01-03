@@ -2,6 +2,7 @@
   "$schema":"RulesSchema.json",
   "name": "ClickTheContest",
   "start-voting-pattern": ".+Esempio di votazione.+",
+  "voteable-pattern": ".*#(\\d{1,2}).*<a.?href.*<\/a>.*",
   "voting-categories": {
     "named": true,
     "count": 4,

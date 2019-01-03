@@ -3,29 +3,28 @@ package org.altervista.girildo;
 import org.altervista.girildo.flickr.FlickrJSONProvider;
 import org.altervista.girildo.flickr.FlickrProvider;
 
+import java.io.IOException;
+import java.util.List;
+
 public class Main {
 
     public static void main(String[] args) {
-        Table t = new Table();
-
-        Photo[] ph = new Photo[]{new Photo(0), new Photo(1), new Photo(2)};
-
-        t.addVoteable(ph[0]);
-        t.addVoteable(ph[1]);
-        t.addVoteable(ph[2]);
-
+        TableComputer cmpt;
+        Table table = null;
         try {
             FlickrProvider provider = new FlickrJSONProvider(
-                    //"https://www.flickr.com/groups/clickthecontest/discuss/72157704704255574/",
-                    "https://www.flickr.com/groups/1744262@N24/discuss/72157698919350640/",
-                    "/SoniaGalleryRules.json");
-            provider.provideVotes();
+                    "https://www.flickr.com/groups/clickthecontest/discuss/72157677011628148/",
+                    "/ClickTheContestRules.json");
+                    //"https://www.flickr.com/groups/1744262@N24/discuss/72157698919350640/",
+                    //"/SoniaGalleryRules.json");
+            //List<Voteable> photoList =  provider.provideVoteables();
+            //List<Vote> voteList = provider.provideVotes();
+            cmpt = new TableComputer(provider, provider);
+            table = cmpt.generateTable();
         } catch (Exception e) {
             e.printStackTrace();
         }
-
-        t.computeTable();
-
+        System.out.print(table.toString());
 
     }
 }

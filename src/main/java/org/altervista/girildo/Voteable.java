@@ -1,6 +1,6 @@
 package org.altervista.girildo;
 
-public interface Voteable extends Comparable<Voteable>, Identifiable {
+public interface Voteable extends Comparable<Voteable> {
     int addVote();
     int addVotes(int points);
 
@@ -8,4 +8,7 @@ public interface Voteable extends Comparable<Voteable>, Identifiable {
     int removeVotes(int points);
 
     int getVotes();
+    int getId();
+
+    Agent getAuthor();
 }

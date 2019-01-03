@@ -22,10 +22,11 @@ public class TableComputer {
         for(Voteable voteable:photos)
             table.addVoteable(voteable);
 
+
         for(Vote vote:votes)
             table.addVote(vote);
 
-
-        return null;
+        table.computeTable();
+        return table;
     }
 }

@@ -53,9 +53,9 @@ public class FlickrJSONProvider extends FlickrRegexProvider {
         if (votingCategories.get("named").equals(true))
             categoryNames = new ArrayList<>((Collection<String>) (votingCategories.get("names")));
         else {
-            categoryNames = (ArrayList<String>) IntStream.range(1, votesCount + 1).
-                    mapToObj(String::valueOf).
-                    collect(Collectors.toList());
+            categoryNames = (ArrayList<String>) IntStream.range(1, votesCount + 1)
+                    .mapToObj(String::valueOf)
+                    .collect(Collectors.toList());
         }
 
         for (String s:categoryNames)
@@ -63,5 +63,15 @@ public class FlickrJSONProvider extends FlickrRegexProvider {
             toReturn.put(s.toLowerCase(), voteValues.get(categoryNames.indexOf(s)).intValue());
         }
         return toReturn;
+    }
+
+    @Override
+    String getStartVotingPatternString() {
+        return map.get("start-voting-pattern").toString();
+    }
+
+    @Override
+    String getVoteablePatternString() {
+        return map.get("voteable-pattern").toString();
     }
 }

@@ -1,6 +1,7 @@
 {
   "$schema":"RulesSchema.json",
   "name": "Sonia Gallery",
+  "start-voting-pattern": "(?s).*#{6,}.*",
   "voting-categories": {
     "named": false,
     "count": 5,

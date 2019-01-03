@@ -79,7 +79,8 @@ class FlickrInterface {
             throw new FlickrException("RepList null (Errore di Flickr!)");
 
         return repList.stream()
-               .map(reply -> new FlickrComment(reply.getMessage(), new FlickrUser(reply.getAuthorname())))
+               .map(reply -> new FlickrComment(reply.getMessage(), new FlickrUser(reply.getAuthorname(),
+                       reply.getAuthorId())))
                .collect(Collectors.toList());
     }
 
