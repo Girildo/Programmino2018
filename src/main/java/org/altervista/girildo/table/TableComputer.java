@@ -1,7 +1,17 @@
-package org.altervista.girildo;
+package org.altervista.girildo.table;
+
+import org.altervista.girildo.Vote;
+import org.altervista.girildo.VoteProvider;
+import org.altervista.girildo.Voteable;
+import org.altervista.girildo.VoteableProvider;
 
 import java.util.List;
 
+
+/**
+ * Computes a table collecting {@link Vote}s and {@link Voteable}s from a {@link VoteProvider} and a
+ * {@link VoteableProvider}, respectively.
+ */
 public class TableComputer {
 
     private final VoteableProvider photoProvider;
@@ -26,7 +36,7 @@ public class TableComputer {
         for(Vote vote:votes)
             table.addVote(vote);
 
-        table.computeTable();
+        table.fill();
         return table;
     }
 }

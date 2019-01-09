@@ -1,10 +1,7 @@
 package org.altervista.girildo;
 
-import org.jetbrains.annotations.NotNull;
 
-//TODO Get rid of this stupid interface.
 public class Voteable {
-
 
     private int id;
     private Agent author;
