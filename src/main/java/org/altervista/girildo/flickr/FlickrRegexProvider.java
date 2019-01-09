@@ -1,7 +1,6 @@
 package org.altervista.girildo.flickr;
 
 import com.flickr4java.flickr.FlickrException;
-import org.altervista.girildo.Photo;
 import org.altervista.girildo.Vote;
 import org.altervista.girildo.Voteable;
 import org.altervista.girildo.exceptions.InvalidVoteException;
@@ -36,7 +35,7 @@ public abstract class FlickrRegexProvider extends FlickrProvider {
             for (FlickrComment comment : filteredComments) {
                 Matcher matcher = voteablePattern.matcher(comment.getText());
                 matcher.find();
-                Voteable vtbl = new Photo(Integer.parseInt(matcher.group(1)),
+                Voteable vtbl = new Voteable(Integer.parseInt(matcher.group(1)),
                         comment.getAuthor());
 
                 toReturn.add(vtbl);
