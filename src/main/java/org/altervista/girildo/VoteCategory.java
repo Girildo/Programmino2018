@@ -2,10 +2,19 @@ package org.altervista.girildo;
 
 public class VoteCategory implements Comparable<VoteCategory> {
 
-    private String name;
+    final private String internalName;
+    final private String name;
+
+    public static final VoteCategory SPECIAL_TOTAL_CATEGORY = new TotalCategory();
+
 
     public VoteCategory(String name) {
+        this(name, name);
+    }
+
+    private VoteCategory(String internalName, String name){
         this.name = name;
+        this.internalName = internalName;
     }
 
     public String getName() {
@@ -26,11 +35,18 @@ public class VoteCategory implements Comparable<VoteCategory> {
     public boolean equals(Object other) {
         if(!(other instanceof VoteCategory))
             return false;
-        return this.getName().equalsIgnoreCase(((VoteCategory)other).getName());
+        return this.internalName.equalsIgnoreCase(((VoteCategory) other).internalName);
     }
 
     @Override
     public int hashCode() {
         return this.getName().hashCode();
+    }
+
+
+    private static class TotalCategory extends VoteCategory {
+        TotalCategory() {
+            super("@@@Total@@@", "Total");
+        }
     }
 }

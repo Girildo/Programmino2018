@@ -2,15 +2,12 @@ package org.altervista.girildo;
 
 import org.altervista.girildo.flickr.FlickrJSONProvider;
 import org.altervista.girildo.flickr.FlickrProvider;
-
-import java.io.IOException;
-import java.util.List;
+import org.altervista.girildo.table.TableComputer;
 
 public class Main {
 
     public static void main(String[] args) {
         TableComputer cmpt;
-        Table table = null;
         try {
             FlickrProvider provider = new FlickrJSONProvider(
                     "https://www.flickr.com/groups/clickthecontest/discuss/72157677011628148/",
@@ -20,11 +17,10 @@ public class Main {
             //List<Voteable> photoList =  provider.provideVoteables();
             //List<Vote> voteList = provider.provideVotes();
             cmpt = new TableComputer(provider, provider);
-            table = cmpt.generateTable();
+            System.out.print(cmpt.generateTable().toString());
         } catch (Exception e) {
             e.printStackTrace();
         }
-        System.out.print(table.toString());
 
     }
 }
