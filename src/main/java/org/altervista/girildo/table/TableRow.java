@@ -6,10 +6,11 @@ import org.jetbrains.annotations.NotNull;
 import java.util.Collection;
 import java.util.HashMap;
 
-class TableRow implements Comparable<TableRow> {
+class TableRow implements Comparable<TableRow>, Cloneable {
+
     private HashMap<VoteCategory, Integer> points;
 
-    TableRow(Collection<VoteCategory> categories) {
+    private TableRow(Collection<VoteCategory> categories) {
         this.points = new HashMap<>();
         this.points.put(VoteCategory.SPECIAL_TOTAL_CATEGORY, 0);
 
@@ -17,9 +18,12 @@ class TableRow implements Comparable<TableRow> {
             this.points.put(category, 0);
     }
 
+    private TableRow(final TableRow prototype){
+        this.points = new HashMap<>(prototype.points);
+    }
+
     void addPoints(VoteCategory category, int points) throws NullPointerException{
         if(!this.points.containsKey(category))
-            throw new NullPointerException(String.format("This category (%s) does not exist!", category.toString()));
         this.points.merge(category, points, Integer::sum);
         if (!category.equals(VoteCategory.SPECIAL_TOTAL_CATEGORY))
             this.points.merge(VoteCategory.SPECIAL_TOTAL_CATEGORY, points, Integer::sum);
@@ -29,5 +33,18 @@ class TableRow implements Comparable<TableRow> {
     public int compareTo(@NotNull TableRow o) {
         return this.points.get(VoteCategory.SPECIAL_TOTAL_CATEGORY)
                 .compareTo(o.points.get(VoteCategory.SPECIAL_TOTAL_CATEGORY));
+    }
+
+
+    public class TableRowFactory{
+        final TableRow prototype;
+
+        public TableRowFactory(Collection<VoteCategory> categories){
+            prototype = new TableRow(categories);
+        }
+
+        TableRow getEmptyTableRow() {
+            return new TableRow(prototype);
+        }
     }
 }
