@@ -6,7 +6,7 @@ import org.jetbrains.annotations.NotNull;
 import java.util.Collection;
 import java.util.HashMap;
 
-class TableRow implements Comparable<TableRow>, Cloneable {
+class TableRow implements Comparable<TableRow> {
 
     private HashMap<VoteCategory, Integer> points;
 
@@ -24,6 +24,7 @@ class TableRow implements Comparable<TableRow>, Cloneable {
 
     void addPoints(VoteCategory category, int points) throws NullPointerException{
         if(!this.points.containsKey(category))
+            return;
         this.points.merge(category, points, Integer::sum);
         if (!category.equals(VoteCategory.SPECIAL_TOTAL_CATEGORY))
             this.points.merge(VoteCategory.SPECIAL_TOTAL_CATEGORY, points, Integer::sum);
@@ -35,8 +36,29 @@ class TableRow implements Comparable<TableRow>, Cloneable {
                 .compareTo(o.points.get(VoteCategory.SPECIAL_TOTAL_CATEGORY));
     }
 
+    @Override
+    public String toString() {
+        StringBuilder builder = new StringBuilder();
+        for (VoteCategory category : points.keySet()) {
+            if (category.equals(VoteCategory.SPECIAL_TOTAL_CATEGORY) ||
+                    category.equals(VoteCategory.SPECIAL_UNNAMED_CATEGORY))
+                continue;
+            builder.append(category.toString());
+            builder.append(": ");
+            builder.append(points.get(category));
+            builder.append(" | ");
+        }
 
-    public class TableRowFactory{
+        VoteCategory category = VoteCategory.SPECIAL_TOTAL_CATEGORY;
+        builder.append(category.toString());
+        builder.append(": ");
+        builder.append(points.get(category));
+
+        return builder.toString();
+    }
+
+
+    public static class TableRowFactory{
         final TableRow prototype;
 
         public TableRowFactory(Collection<VoteCategory> categories){

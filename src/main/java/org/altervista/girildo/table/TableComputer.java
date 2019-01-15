@@ -37,6 +37,7 @@ public class TableComputer {
             table.addVote(vote);
 
         table.fill();
+        table.sort();
         return table;
     }
 }
