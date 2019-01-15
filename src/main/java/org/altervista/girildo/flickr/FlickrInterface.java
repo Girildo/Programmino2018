@@ -11,6 +11,7 @@ import com.google.api.client.json.jackson2.JacksonFactory;
 
 import java.io.File;
 import java.io.FileReader;
+import java.time.Instant;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
@@ -30,7 +31,7 @@ class FlickrInterface {
             "(?:(?:https?://)?www\\.flickr\\.com/groups/)(.+)(?:/discuss/)(\\d+)/?";
 
     private static final Pattern DISCUSSION_ID_PATTERN = Pattern.compile(DISCUSSION_ID_REGEX);
-
+    private static FlickrInterface singleton;
     private Flickr flickr;
 
     private FlickrInterface() {
@@ -46,32 +47,31 @@ class FlickrInterface {
         }
     }
 
-    private static String getTopicIDFromUrl(String url)
-    {
+    private static String getTopicIDFromUrl(String url) {
         url = url.trim();
         Matcher matcher = DISCUSSION_ID_PATTERN.matcher(url);
         matcher.find();
         return matcher.group(2);
     }
 
-    List<FlickrComment> getCommentsFromDiscussion(String url) throws IllegalStateException, FlickrException
-    {
+    static FlickrInterface getInstance() {
+        if (singleton == null)
+            singleton = new FlickrInterface();
+        return singleton;
+    }
+
+    List<FlickrComment> getCommentsFromDiscussion(String url) throws IllegalStateException, FlickrException {
         GroupDiscussInterface dInterface = flickr.getDiscussionInterface();
         ArrayList<Reply> repList = null;
-        try
-        {
+        try {
             String topicID = getTopicIDFromUrl(url);
             int count = dInterface.getTopicInfo(topicID).getCountReplies(); //count delle risposte
             ReplyObject rep = dInterface.getReplyList(topicID, count, 1); //ottiene l'oggetto dall'API
             repList = rep.getReplyList(); //estrae la lista delle risposte
-        }
-        catch(IllegalStateException ex)
-        {
+        } catch (IllegalStateException ex) {
             throw new IllegalStateException("Il link alla discussione Flickr che hai inserito non è valido. " +
                     "Assicurati di averlo copiato interamente!", ex);
-        }
-        catch(FlickrException ex)
-        {
+        } catch (FlickrException ex) {
             throw new FlickrException("Sembra esserci un errore con Flickr", ex);
         }
 
@@ -79,16 +79,10 @@ class FlickrInterface {
             throw new FlickrException("RepList null (Errore di Flickr!)");
 
         return repList.stream()
-               .map(reply -> new FlickrComment(reply.getMessage(), new FlickrUser(reply.getAuthorname(),
-                       reply.getAuthorId())))
-               .collect(Collectors.toList());
-    }
-
-
-    private static FlickrInterface singleton;
-    static FlickrInterface getInstance() {
-        if(singleton == null)
-            singleton = new FlickrInterface();
-        return singleton;
+                .map(reply ->
+                        new FlickrComment(reply.getMessage(),
+                                new FlickrUser(reply.getAuthorname(), reply.getAuthorId()),
+                                Instant.ofEpochSecond(Long.parseLong(reply.getDatecreate()))))
+                .collect(Collectors.toList());
     }
 }

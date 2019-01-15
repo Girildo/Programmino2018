@@ -36,7 +36,8 @@ public abstract class FlickrRegexProvider extends FlickrProvider {
                 Matcher matcher = voteablePattern.matcher(comment.getText());
                 matcher.find();
                 Voteable vtbl = new Voteable(Integer.parseInt(matcher.group(1)),
-                        comment.getAuthor());
+                        comment.getAuthor(),
+                        comment.getDateOfCreation());
 
                 toReturn.add(vtbl);
             }
@@ -70,7 +71,7 @@ public abstract class FlickrRegexProvider extends FlickrProvider {
                         // Only happening for groups that are actually matched.
                         Integer pointNum = pointScheme.get(matcher.group(i));
                         if (pointNum == null)
-                            pointNum = pointScheme.get(Integer.toString(i % 2));
+                            pointNum = pointScheme.get(Integer.toString(i / 2 + 1));
                         //pointNum = pointNum;
 
                         Vote vote = new Vote(
