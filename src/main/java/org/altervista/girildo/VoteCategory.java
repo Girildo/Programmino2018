@@ -5,11 +5,12 @@ public class VoteCategory implements Comparable<VoteCategory> {
     final private String internalName;
     final private String name;
 
-    public static final VoteCategory SPECIAL_TOTAL_CATEGORY = new TotalCategory();
+    public static final VoteCategory SPECIAL_TOTAL_CATEGORY = new VoteCategory("@@@TOTAL@@@", "Total");
+    public static final VoteCategory SPECIAL_UNNAMED_CATEGORY = new VoteCategory("@@@@@@", "");
 
 
     public VoteCategory(String name) {
-        this(name, name);
+        this("@@@"+name.toUpperCase()+"@@@", name);
     }
 
     private VoteCategory(String internalName, String name){
@@ -43,10 +44,4 @@ public class VoteCategory implements Comparable<VoteCategory> {
         return this.getName().hashCode();
     }
 
-
-    private static class TotalCategory extends VoteCategory {
-        TotalCategory() {
-            super("@@@Total@@@", "Total");
-        }
-    }
 }
